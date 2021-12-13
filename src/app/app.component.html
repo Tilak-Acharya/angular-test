@@ -1,0 +1,68 @@
+<div class="container-fluid mb-5">
+  <h1>Testing - Enrollment form</h1>
+
+  <form #userForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+  
+  
+
+    <div class="form-group my-4">
+      <label >Name</label>
+      <input type="text" required #name="ngModel" placeholder="Enter Name" 
+      [(ngModel)]="userModel.name" [class.is-invalid]="name.invalid && name.touched" class="form-control" name="userName">
+      <small class="text-danger"  [class.d-none]="name.valid || name.untouched" >Name is required</small>
+    </div>
+
+    
+
+    <div class="form-group my-4 ">
+      <label >Email</label>
+      <input type="email" name="email" placeholder="abcd12@outlook.com" [(ngModel)]="userModel.email" class="form-control"> 
+    </div>
+    
+    <div class="form-group my-4">
+      <label >Phone</label>
+      <input type="tel" required #phone = "ngModel" pattern= "^\d{10}$" placeholder="+91-" 
+      [class.is-invalid]="phone.invalid && phone.touched" class="form-control" 
+      [(ngModel)]="userModel.phone" name="phone" > 
+      <!-- <small class="text-danger"  [class.d-none]="phone.valid || phone.untouched" >Phone number must be 10 digits</small> -->
+      <div *ngIf="phone.errors && (phone.invalid || phone.touched)">
+        <small class="text-danger" *ngIf="phone.errors['required']" > Phone number is required </small>
+        <small class="text-danger" *ngIf="phone.errors['pattern']" >  Phone number should be 10 digits </small>
+      </div>
+    </div>
+
+
+
+    <div class="form-group mt-4 mb-2">
+      <select (blur)="validateTopic(topic.value)" (change)="validateTopic(topic.value)"   
+       #topic="ngModel" [class.is-invalid]="topicHasError && topic.touched" 
+       class="form-select" name = "topic" [(ngModel)]="userModel.topic">
+        <option value="default">I am interested in</option>
+        <option *ngFor="let topic of topics">{{ topic }}</option>
+      </select>
+      <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched">Please choose a topic</small> 
+    </div>
+
+    <div class="form-group mt-1">
+      <label class="my-4">Time preference</label>
+        <div class="form-check">
+        <input type="radio" [(ngModel)]="userModel.timePreference" class="form-check-input" name="timepreference" value="morning">
+        <label class="form-check-label">Morning (9am to 12pm)</label>
+
+    </div>
+    
+    <div class="form-check">
+      <input type="radio" [(ngModel)]="userModel.timePreference" class="form-check-input" name="timepreference" value="evening">
+      <label class="form-check-label">Evening (5pm to 8pm)</label>
+    </div>
+    </div>
+
+    <div class="form-check my-4">
+      <input type="checkbox" name="subscribe" [(ngModel)] ="userModel.subscribe" class="form-check-input">
+      <label class="form-check-label">Send me promotional offers</label>
+    </div>
+
+    <button [disabled]="userForm.form.invalid || topicHasError" type="submit" class ="btn btn-primary">Submit</button>
+  
+  </form>
+</div>
